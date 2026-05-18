@@ -4,10 +4,36 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Definiujemy ścisłe kategorie projektów zgodne z wytycznymi siostry
+enum Category {
+  INDUSTRIAL
+  RESIDENTIAL
+  COMMERCIAL
+  EDUCATION
+}
+
+// Model projektu (portfolio) dla firmy inżynieryjnej
+model Project {
+  id String @id @default(uuid())
+  title String // Nazwa projektu 
+  category Category //Jedna z czterech powyższych kategorii
+  mainImage String // URL do screenshotu modelu 3D
+  createdAt DateTime @default(now())
+}
+
+// Opcjonalnie: Model do zapisywania wiadomości z formularza w bazie (warto mieć jako backup)
+model ContactMessage {
+  id String @id @default(uuid())
+  name String
+  email String
+  message String @db.Text
+  createdAt DateTime @default(now())
 }
