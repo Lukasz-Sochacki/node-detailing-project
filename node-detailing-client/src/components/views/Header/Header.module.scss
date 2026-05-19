@@ -1,0 +1,59 @@
+@import '../../../styles/variables';
+
+.header {
+  background-color: $color-bg-white;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba($color-text-dark, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  color: $color-text-dark;
+  font-family: $font-primary;
+  font-size: 2.25rem; // Identyczna skala 0.45 z font-size 5rem z cześci Intro
+  font-weight: 900;
+  letter-spacing: 3.6px; // Odpowiednio przeliczony letter-spacing logo
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: $color-text-muted;
+  font-family: $font-primary;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: $letter-spacing-nav;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: $transition-smooth;
+  position: relative;
+
+  &:hover {
+    color: $color-text-dark;
+  }
+  // Wyróżnienie aktywnej kategorii za pomocą kropki lub zmiany koloru
+  &:active {
+    color: $color-text-dark;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: $color-text-dark;
+    }
+  }
+}

@@ -2,10 +2,12 @@ import { API_URL } from '../config';
 
 //selectors
 export const getAllProjects = (state) => state.projects;
-export const getProjectsByCategory = ({ projects }, category) =>
-  category === 'ALL'
+export const getProjectsByCategory = ({ projects }, category) => {
+  if (!projects || projects.length === 0) return [];
+  return category === 'ALL'
     ? projects
     : projects.filter((project) => project.category === category);
+};
 
 //actions
 const createActionName = (actionName) => `api/projects/${actionName}`;
