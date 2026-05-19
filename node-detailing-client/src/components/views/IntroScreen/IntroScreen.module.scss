@@ -1,0 +1,24 @@
+@import '../../../styles/variables';
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.logo {
+  color: $color-text-dark;
+  font-family: $font-primary;
+  font-size: 5rem;
+  font-weight: 900;
+  letter-spacing: $letter-spacing-logo;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
