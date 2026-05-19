@@ -1,0 +1,11 @@
+// Kolory firmy Node Detailing
+$color-bg-beige: #f5f5dc; // Tymczasowy beż siostry - do podmiany na kod HEX z OneDrive
+$color-bg-white: #ffffff; // Główna biel strony
+$color-text-dark: #111111; // Głęboka, surowa czerń do napisów i loga
+$color-text-muted: #777777; // Szary, techniczny kolor do podpisów kategorii
+
+// Typografia i efekty
+$font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$letter-spacing-logo: 8px;
+$letter-spacing-nav: 2px;
+$transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
