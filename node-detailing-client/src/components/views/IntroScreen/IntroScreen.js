@@ -7,7 +7,7 @@ const IntroScreen = ({ onComplete }) => {
     // Ekran znika dopiero po 2.2 sekundy, dając logu czas na zaparkowanie w rogu
     const timer = setTimeout(() => {
       onComplete();
-    }, 2200);
+    }, 2800);
     return () => clearTimeout(timer);
   }, [onComplete]);
 

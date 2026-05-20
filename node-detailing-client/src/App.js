@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProjects, getProjectsByCategory } from './redux/projectsRedux';
+import {
+  fetchProjects,
+  getProjectsByCategory,
+  getIsLoading,
+} from './redux/projectsRedux';
 
 import IntroScreen from './components/views/IntroScreen/IntroScreen';
 import Header from './components/views/Header/Header';
+import ProjectFeed from './components/views/ProjectFeed/ProjectFeed';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -13,10 +18,16 @@ const App = () => {
   const filteredProjects = useSelector((state) =>
     getProjectsByCategory(state, currentCategory),
   );
+  const isLoading = useSelector(getIsLoading);
 
   useEffect(() => {
     if (!showIntro) {
-      dispatch(fetchProjects());
+      // Wstrzymujemy start pobierania o 3.2 sekundy od momentu zniknięcia intro
+      const fetchTimer = setTimeout(() => {
+        dispatch(fetchProjects());
+      }, 2500);
+      // Klasyczne czyszczenie licznika z Kodilli przy odmontowywaniu komponentu
+      return () => clearTimeout(fetchTimer);
     }
   }, [dispatch, showIntro]);
 
@@ -31,15 +42,8 @@ const App = () => {
             onCategoryChange={setCurrentCategory}
           />
 
-          <main className='container-fluid px-4 mt-5 text-center'>
-            <p className='text-muted small'>
-              Połączenie FullStack z NestJs i MySQL działa
-            </p>
-            <p className='lead'>
-              Wybrana kategoria: <strong>{currentCategory}</strong> | Liczba
-              odfiltrowanych projektów:{' '}
-              <strong>{filteredProjects.length}</strong>
-            </p>
+          <main className='container-fluid px-0'>
+            <ProjectFeed projects={filteredProjects} loading={isLoading} />
           </main>
         </div>
       )}
