@@ -1,0 +1,80 @@
+@import '../../../styles/variables';
+
+.contactSection {
+  padding: 6rem 0;
+  background-color: $color-bg-white;
+}
+
+.heading {
+  font-family: $font-primary;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: $color-text-dark;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.inputGroup {
+  position: relative;
+  width: 100%;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba($color-text-dark, 0.15);
+  padding: 10px 0;
+  color: $color-text-dark;
+  font-family: $font-primary;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: $transition-smooth;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: $color-text-dark;
+  }
+
+  &::placeholder {
+    color: $color-text-muted;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+}
+
+.textarea {
+  resize: none;
+}
+
+.submitBtn {
+  align-self: flex-start;
+  background-color: $color-text-dark !important;
+  border: none !important;
+  color: $color-bg-white;
+  font-family: $font-primary;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 12px 35px !important;
+  border-radius: 0 !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    background-color: rgba($color-text-dark, 0.8) !important;
+  }
+
+  &:disabled {
+    background-color: $color-text-muted !important;
+  }
+}

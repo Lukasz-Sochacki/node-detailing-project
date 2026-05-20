@@ -9,6 +9,7 @@ import {
 import IntroScreen from './components/views/IntroScreen/IntroScreen';
 import Header from './components/views/Header/Header';
 import ProjectFeed from './components/views/ProjectFeed/ProjectFeed';
+import ContactForm from './components/views/ContactForm/ContactForm';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const App = () => {
           <main className='container-fluid px-0'>
             <ProjectFeed projects={filteredProjects} loading={isLoading} />
           </main>
+          {!isLoading && <ContactForm />}
         </div>
       )}
     </>

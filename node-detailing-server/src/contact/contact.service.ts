@@ -6,14 +6,15 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class ContactService {
-  // Tworzymy konfigurację transportera poczty (SMTP)
   private mautTransporter = nodemailer.createTransport({
-    host: '://gmail.com',
-    port: 465,
-    secure: true,
+    service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER, // Twój mail firmowy wyciągnięty z pliku .env
-      pass: process.env.EMAIL_PASS, // Twoje tajne hasło aplikacji wyciągnięte z pliku .env
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+    // DODAJEMY TĘ SEKCJĘ PONIŻEJ (Rozwiązuje problem błędu certyfikatu TLS):
+    tls: {
+      rejectUnauthorized: false,
     },
   });
   constructor(private prismaService: PrismaService) {}
@@ -44,8 +45,8 @@ export class ContactService {
       await this.mautTransporter.sendMail(mailOptions);
       console.log('Mail wysłany do Kate pomyślnie!');
     } catch (error) {
-      console.error('Błąd podczas wysyłania maila pocztą SMTP:', error);
-      // Nie rzucamy błędu blokującego - nawet jeśli mail zawiedzie, to wiadomość zapisała się w MySQL jako backup!
+      // Jeśli mail nie dojdzie, błąd wyświetli się w terminalu serwera
+      console.error('BŁĄD SMTP: ', error);
     }
     return savedMessage;
   }
