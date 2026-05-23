@@ -19,32 +19,29 @@ const Header = ({ currentCategory, onCategoryChange }) => {
         fluid
         className='px-4 d-flex justify-content-between align-items-center'
       >
-        {/* LOGO: Wstrzykujemy czas bezpośrednio do klucza layout */}
         <motion.div
           className={styles.logo}
           onClick={() => onCategoryChange('ALL')}
           layoutId='shared-logo'
           transition={{
-            // Kluczowe ustawienie dla animacji typu shared element (layoutId)
             layout: {
-              type: 'tween', // Wyłączamy szybką sprężynę
-              duration: 3.8, // Dokładnie 2.8 sekundy powolnego lotu
-              ease: [0.25, 1, 0.5, 1], // Płynne wyhamowanie w rogu
+              type: 'tween',
+              duration: 1.8, // Zmieniamy na 1.8 sekundy, dopasowując do prędkości windy
+              ease: [0.25, 1, 0.5, 1],
             },
           }}
         >
           NODE
         </motion.div>
 
-        {/* NAWIGACJA: Pojawia się płynnie w trakcie trwania lotu loga */}
         <motion.nav
           className={styles.nav}
           initial={{ opacity: 0, x: 15 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{
-            duration: 1.0,
+            duration: 0.8,
             ease: 'easeOut',
-            delay: 1.4, // Menu zacznie się pojawiać w 1.4 sekundy (w połowie wolnego lotu loga)
+            delay: 1.0, // Menu pojawia się delikatnie w połowie trwania lotu i jazdy windy
           }}
         >
           {menuItems.map((item) => (

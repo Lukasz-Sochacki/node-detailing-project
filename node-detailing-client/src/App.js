@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AnimatePresence } from 'framer-motion'; // 1. DODAJEMY TEN IMPORT
 import {
   fetchProjects,
   getProjectsByCategory,
@@ -24,36 +25,41 @@ const App = () => {
 
   useEffect(() => {
     if (!showIntro) {
-      // Wstrzymujemy start pobierania o 3.2 sekundy od momentu zniknięcia intro
       const fetchTimer = setTimeout(() => {
         dispatch(fetchProjects());
-      }, 2500);
-      // Klasyczne czyszczenie licznika z Kodilli przy odmontowywaniu komponentu
+      }, 1500);
       return () => clearTimeout(fetchTimer);
     }
   }, [dispatch, showIntro]);
 
   return (
     <>
-      {showIntro ? (
-        <IntroScreen onComplete={() => setShowIntro(false)} />
-      ) : (
-        <div style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
-          <Header
-            currentCategory={currentCategory}
-            onCategoryChange={setCurrentCategory}
-          />
+      {/* 2. OWIJAMY WARUNEK W ANIMATE PRESENCE */}
+      <AnimatePresence mode='wait'>
+        {showIntro ? (
+          // Przesyłamy klucz key, aby AnimatePresence wiedział, kiedy komponent znika
+          <IntroScreen key='intro' onComplete={() => setShowIntro(false)} />
+        ) : (
+          <div
+            key='content'
+            style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}
+          >
+            <Header
+              currentCategory={currentCategory}
+              onCategoryChange={setCurrentCategory}
+            />
 
-          <main className='container-fluid px-0'>
-            {currentCategory === 'ABOUT US' ? (
-              <AboutUs />
-            ) : (
-              <ProjectFeed projects={filteredProjects} loading={isLoading} />
-            )}
-          </main>
-          {!isLoading && <ContactForm />}
-        </div>
-      )}
+            <main className='container-fluid px-0'>
+              {currentCategory === 'ABOUT US' ? (
+                <AboutUs />
+              ) : (
+                <ProjectFeed projects={filteredProjects} loading={isLoading} />
+              )}
+            </main>
+            {!isLoading && <ContactForm />}
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

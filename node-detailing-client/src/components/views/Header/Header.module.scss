@@ -7,14 +7,16 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  -webkit-font-smoothing: antialiased; // Zabezpieczenie przed mruganiem grubości liter
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .logo {
   color: $color-text-dark;
   font-family: $font-primary;
-  font-size: 2.25rem; // Identyczna skala 0.45 z font-size 5rem z cześci Intro
+  font-size: 2.25rem;
   font-weight: 900;
-  letter-spacing: 3.6px; // Odpowiednio przeliczony letter-spacing logo
+  letter-spacing: 3.6px;
   text-transform: uppercase;
   cursor: pointer;
   user-select: none;

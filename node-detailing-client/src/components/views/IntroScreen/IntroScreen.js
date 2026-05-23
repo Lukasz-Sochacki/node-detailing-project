@@ -4,27 +4,33 @@ import styles from './IntroScreen.module.scss';
 
 const IntroScreen = ({ onComplete }) => {
   useEffect(() => {
-    // Ekran znika dopiero po 2.2 sekundy, dając logu czas na zaparkowanie w rogu
+    // Trzymamy logo na środku beżu przez 1.2 sekundy, po czym odpalamy zmianę stanu w App.js
     const timer = setTimeout(() => {
       onComplete();
-    }, 2800);
+    }, 1200);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <motion.div
       className={styles.container}
-      initial={{ backgroundColor: '#F5F5DC' }}
-      animate={{ backgroundColor: '#FFFFFF' }}
-      transition={{ duration: 1.5, delay: 0.4 }}
+      // POPRAWKA: Jawnie definiujemy pozycję startową i trzymanie pozycji w tekście
+      initial={{ y: '0vh' }}
+      animate={{ y: '0vh' }}
+      exit={{ y: '-100vh' }} // Winda rusza pionowo w kosmos po wywołaniu onComplete
+      transition={{
+        type: 'tween',
+        duration: 1.8, // Winda jedzie dostojnie przez 1.8 sekundy
+        ease: [0.76, 0, 0.24, 1], // Kultowa, płynna krzywa przesunięcia ze strony BIG
+      }}
     >
       <motion.div
         className={styles.logo}
-        layoutId='shared-logo' // Łącznik dwóch komponentów
+        layoutId='shared-logo'
         transition={{
-          type: 'tween', // WYŁĄCZENIE SPRĘŻYNY: Wymuszamy płynny ruch czasowy
-          duration: 2.8, // Dokładnie 2.8 sekundy dostojnego, wolnego lotu
-          ease: [0.25, 1, 0.5, 1], // Przepiękne, łagodne wyhamowanie na końcu podróży
+          type: 'tween',
+          duration: 1.8, // Lot napisu trwa dokładnie tyle samo co jazda windy
+          ease: [0.25, 1, 0.5, 1],
         }}
       >
         NODE

@@ -6,7 +6,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 9999;
+  background-color: $color-bg-beige !important; // Wymuszamy piękny beż startowy
+  z-index: 9999; // Na wierzchu, zasłaniając spód strony
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +17,7 @@
 .logo {
   color: $color-text-dark;
   font-family: $font-primary;
-  font-size: 2.25rem;
+  font-size: 5rem;
   font-weight: 900;
   letter-spacing: $letter-spacing-logo;
   text-transform: uppercase;
