@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { Injectable } from '@nestjs/common';
-// Zmieniamy ścieżkę na relatywną (wygasza błędy typowania any w edytorze)
 import { PrismaService } from '../prisma/prisma.service';
-import { Project } from '@prisma/client';
+import { Project } from '@prisma/client'; // Usunięto User
 
 @Injectable()
 export class ProjectsService {
