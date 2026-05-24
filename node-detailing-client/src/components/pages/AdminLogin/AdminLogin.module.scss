@@ -1,0 +1,89 @@
+@import '../../../styles/variables';
+
+.loginPage {
+  background-color: $color-bg-beige; // Startujemy z eleganckiego beżu siostry
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  background-color: $color-bg-white;
+  padding: 3.5rem;
+  box-shadow: 0 20px 40px rgba($color-text-dark, 0.05); // Bardzo delikatny, luksusowy cień
+  border-radius: 0; // Całkowicie ostre krawędzie
+}
+
+.heading {
+  font-family: $font-primary;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: $color-text-dark;
+  margin-bottom: 3rem;
+  text-align: center;
+  border-bottom: 1px solid rgba($color-text-dark, 0.1);
+  padding-bottom: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.inputGroup {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba($color-text-dark, 0.15); // Czysta dolna kreska
+  padding: 10px 0;
+  color: $color-text-dark;
+  font-family: $font-primary;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: $transition-smooth;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: $color-text-dark; // Linia robi się czarna po kliknięciu
+  }
+
+  &::placeholder {
+    color: $color-text-muted;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  background-color: $color-text-dark !important;
+  border: none !important;
+  color: $color-bg-white;
+  font-family: $font-primary;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 12px 0 !important;
+  width: 100%;
+  border-radius: 0 !important; // Ostre krawędzie przycisku
+  transition: $transition-smooth;
+
+  &:hover {
+    background-color: rgba($color-text-dark, 0.8) !important;
+  }
+
+  &:disabled {
+    background-color: $color-text-muted !important;
+  }
+}
