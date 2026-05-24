@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { PrismaClient, Category } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
+
 const db = new PrismaClient();
 
 function getProjects() {
@@ -50,8 +52,32 @@ function getProjects() {
 }
 
 async function seed() {
+  // Czyszczenie starych danych przed nowym załadowaniem bazy
+  await db.password.deleteMany(); // Najpierw czyścimy powiązane hasła, by nie zepsuć relacji w bazie
+  await db.user.deleteMany(); // Potem czyścimy użytkowników
   await db.contactMessage.deleteMany();
   await db.project.deleteMany();
+
+  // 1. GENERUJEMY SZYFROWANE HASŁO DLA SIOSTRY (np. testowe: admin123)
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+
+  // 2. WSTRZYKUJEMY KONTO ADMINISTRATORA DLA SIOSTRY KATE
+  const adminUser = await db.user.upsert({
+    where: { email: 'kate@nodedetailing.com.au' },
+    update: {},
+    create: {
+      email: 'kate@nodedetailing.com.au',
+      role: 'ADMIN', // przypisujemy rolę ADMIN, na którę czeka nasz AdminAuthGuard
+      password: {
+        create: {
+          hashedPassword: hashedPassword,
+        },
+      },
+    },
+  });
+  console.log(`Konto administratora utworzone pomyślnie: ${adminUser.email} `);
+
+  // 3. WSTRZYKUJEMY TWOJE PROJEKTY PORTFOLIO
 
   await Promise.all(
     getProjects().map((project) => {
@@ -59,7 +85,9 @@ async function seed() {
     }),
   );
 
-  console.log('Seed zakończony pomyślnie z lokalnymi ścieżkami do zdjęć');
+  console.log(
+    'Seed zakończony pomyślnie z lokalnymi ścieżkami do zdjęć oraz kontem administratora!',
+  );
 }
 
 seed();
