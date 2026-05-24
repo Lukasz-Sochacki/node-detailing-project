@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
 .loginPage {
-  background-color: $color-bg-beige; // Startujemy z eleganckiego beżu siostry
+  background-color: $color-bg-beige;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -10,32 +10,34 @@
 
 .formContainer {
   background-color: $color-bg-white;
-  padding: 3.5rem;
-  box-shadow: 0 20px 40px rgba($color-text-dark, 0.05); // Bardzo delikatny, luksusowy cień
-  border-radius: 0; // Całkowicie ostre krawędzie
+  padding: 4rem;
+  box-shadow: 0 30px 60px rgba($color-text-dark, 0.06);
+  border-radius: 0;
+  width: 100%;
+  max-width: 480px;
 }
 
 .heading {
   font-family: $font-primary;
-  font-size: 1rem;
-  font-weight: 800;
+  font-size: 0.95rem;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px; // Eleganckie, techniczne rozstrzelenie liter
   color: $color-text-dark;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
   text-align: center;
-  border-bottom: 1px solid rgba($color-text-dark, 0.1);
-  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba($color-text-dark, 0.08);
+  padding-bottom: 2rem;
+  line-height: 1.6;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 3rem; // Większe odstępy między polami dla luksusowego klimatu
 }
 
 .inputGroup {
-  position: relative;
   width: 100%;
 }
 
@@ -43,47 +45,66 @@
   width: 100%;
   background: none;
   border: none;
-  border-bottom: 1px solid rgba($color-text-dark, 0.15); // Czysta dolna kreska
-  padding: 10px 0;
+  border-bottom: 1px solid rgba($color-text-dark, 0.15);
+  padding: 12px 0;
   color: $color-text-dark;
   font-family: $font-primary;
   font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   transition: $transition-smooth;
+  box-sizing: border-box; // Gwarantuje idealne wyrównanie do krawędzi
 
   &:focus {
     outline: none;
-    border-bottom-color: $color-text-dark; // Linia robi się czarna po kliknięciu
+    border-bottom-color: $color-text-dark;
   }
 
   &::placeholder {
     color: $color-text-muted;
     font-size: 0.8rem;
     font-weight: 700;
-    text-transform: uppercase;
+    letter-spacing: 1.5px;
   }
 }
 
 .submitBtn {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   background-color: $color-text-dark !important;
   border: none !important;
   color: $color-bg-white;
   font-family: $font-primary;
   font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 2px;
-  padding: 12px 0 !important;
+  letter-spacing: 3px;
+  padding: 14px 0 !important;
   width: 100%;
-  border-radius: 0 !important; // Ostre krawędzie przycisku
+  border-radius: 0 !important;
   transition: $transition-smooth;
 
   &:hover {
-    background-color: rgba($color-text-dark, 0.8) !important;
+    background-color: rgba($color-text-dark, 0.85) !important;
   }
 
   &:disabled {
     background-color: $color-text-muted !important;
+  }
+}
+
+.backLink {
+  display: inline-block;
+  color: $color-text-muted;
+  font-family: $font-primary;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    color: $color-text-dark;
+    transform: translateX(
+      -4px
+    ); // Subtelne, filmowe przesunięcie strzałki w lewo przy najeździe
   }
 }

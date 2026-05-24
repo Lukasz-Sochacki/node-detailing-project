@@ -1,0 +1,127 @@
+@import '../../../styles/variables';
+
+.dashboardPage {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+  font-family: $font-primary;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid $color-text-dark;
+  padding-bottom: 2rem;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: $color-text-dark;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+}
+
+.subTitle {
+  font-size: 0.85rem;
+  color: $color-text-muted;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.logoutBtn {
+  background-color: transparent !important;
+  border: 1px solid rgba($color-text-dark, 0.3) !important;
+  color: $color-text-dark !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 10px 24px !important;
+  border-radius: 0 !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    background-color: $color-text-dark !important;
+    color: $color-bg-white !important;
+    border-color: $color-text-dark !important;
+  }
+}
+
+.tableSection {
+  background-color: $color-bg-white;
+}
+
+.sectionHeading {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $color-text-dark;
+  margin-bottom: 2rem;
+}
+
+.customTable {
+  margin-top: 1rem;
+
+  th {
+    border-top: none !important;
+    border-bottom: 2px solid $color-text-dark !important;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $color-text-dark;
+    padding: 15px 10px !important;
+  }
+
+  td {
+    padding: 20px 10px !important;
+    vertical-align: middle !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $color-text-dark;
+    border-bottom: 1px solid rgba($color-text-dark, 0.08) !important;
+  }
+}
+
+.imgCell {
+  width: 120px;
+}
+
+.tableThumb {
+  width: 100px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background-color: $color-bg-beige;
+}
+
+.titleCell {
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+.categoryCell {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px;
+  color: $color-text-muted !important;
+}
+
+.deleteBtn {
+  background-color: transparent !important;
+  border: 1px solid #dc3545 !important; // Czerwona ramka ostrzegawcza
+  color: #dc3545 !important;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 8px 16px !important;
+  border-radius: 0 !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    background-color: #dc3545 !important;
+    color: $color-bg-white !important;
+  }
+}

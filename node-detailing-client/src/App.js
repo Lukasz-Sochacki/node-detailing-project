@@ -6,7 +6,7 @@ import {
   getProjectsByCategory,
   getIsLoading,
 } from './redux/projectsRedux';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; // Importy z v7
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 
 import IntroScreen from './components/views/IntroScreen/IntroScreen';
 import Header from './components/views/Header/Header';
@@ -72,6 +72,28 @@ const App = () => {
                     )}
                   </main>
                   {!isLoading && <ContactForm />}
+                  {/* DYSKRETNY ODNOŚNIK DLA SIOSTRY NA SAMYM DOLE STRONY */}
+                  {!isLoading && (
+                    <footer
+                      className='text-center py-4'
+                      style={{ borderTop: '1px solid rgba(17, 17, 17, 0.05)' }}
+                    >
+                      <Link
+                        to='/admin-login'
+                        style={{
+                          color: '#777777',
+                          fontFamily: 'Helvetica Neue, Arial',
+                          fontSize: '0.7rem',
+                          letterSpacing: '2px',
+                          textDecoration: 'none',
+                          fontWeight: '700',
+                        }}
+                        className='admin-foot-link'
+                      >
+                        NODE / ADMIN ACCESS
+                      </Link>
+                    </footer>
+                  )}
                 </div>
               )}
             </AnimatePresence>
@@ -80,12 +102,15 @@ const App = () => {
         {/* ŚCIEŻKA UKRYTA: Formularz logowania administratora. Jeśli siostra jest już zalogowana, przekieruje ją do panelu */}
         <Route
           path='/admin-login'
-          element={user ? <Navigate to='admin-dashboard' /> : <AdminLogin />}
+          element={
+            user ? <Navigate to='/admin-dashboard' replace /> : <AdminLogin />
+          }
         />
-        {/* ŚCIEŻKA ZABEZPIECZONA: Panel zarządzania projektami. Jeśli siostra nie jest zalogowana, wyrzuci ją do ekranu logowania */}
         <Route
           path='/admin-dashboard'
-          element={user ? <AdminDashboard /> : <Navigate to='/admin-login' />}
+          element={
+            user ? <AdminDashboard /> : <Navigate to='/admin-login' replace />
+          }
         />
       </Routes>
     </BrowserRouter>

@@ -11,13 +11,15 @@ import { JwtStrategy } from './jwt.strategy';
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   imports: [
-    UsersModule, // Daje dostęp do bazy danych użytkowników przez UsersService
-    PassportModule, // Odpowiada za obsługę Guardów i Strategii
+    UsersModule,
+    PassportModule,
     JwtModule.register({
-      // Rejestrujemy moduł generowania tokenów
-      secret: process.env.JWT_SECRET || 'fallback_secret_key',
+      // Bezpieczny fallback, gdyby plik .env nie załadował się w milisekundzie startu
+      secret:
+        process.env.JWT_SECRET ||
+        'NodeDetailingSuperSecretKey2026!#Engineering',
       signOptions: {
-        expiresIn: (process.env.JWT_EXPIRES_IN || '1d') as any,
+        expiresIn: '1d',
       },
     }),
   ],

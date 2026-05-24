@@ -43,7 +43,12 @@ export class AuthService {
 
   public createSession(user: User): { access_token: string } {
     const payload = { email: user.email, sub: user.id };
-    const accessToken = this.jwtService.sign(payload);
+    // Przekazujemy sekret jawnie do podpisu, co eliminuje błąd 500 JwtModule
+    const accessToken = this.jwtService.sign(payload, {
+      secret:
+        process.env.JWT_SECRET ||
+        'NodeDetailingSuperSecretKey2026!#Engineering',
+    });
     return {
       access_token: accessToken,
     };

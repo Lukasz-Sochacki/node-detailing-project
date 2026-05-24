@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Alert, Button, Spinner } from 'react-bootstrap';
 import {
   loginUser,
@@ -26,7 +26,7 @@ const AdminLogin = () => {
     // Wywołujemy thunka logowania, po sukcesie lecimy do dashboardu
     dispatch(
       loginUser(credentials, () => {
-        navigate('/admin-dashboard');
+        navigate('/admin-dashboard', { replace: true });
       }),
     );
   };
@@ -78,8 +78,16 @@ const AdminLogin = () => {
               )}
             </Button>
           </form>
+          {/* DYSKRETNY POWRÓT DO STRONY GŁÓWNEJ */}
+          <div className='text-center mt-4'>
+            <Link to='/' className={styles.backLink}>
+              ← BACK TO HOME
+            </Link>
+          </div>
         </Col>
       </Row>
     </Container>
   );
 };
+
+export default AdminLogin;
