@@ -16,4 +16,24 @@ export class ProjectsService {
       where: { id },
     });
   }
+
+  public async delete(id: Project['id']): Promise<Project> {
+    return this.prismaService.project.delete({
+      where: { id },
+    });
+  }
+
+  public async create(data: {
+    title: string;
+    category: any;
+    mainImage: string;
+  }): Promise<Project> {
+    return this.prismaService.project.create({
+      data: {
+        title: data.title,
+        category: data.category,
+        mainImage: data.mainImage,
+      },
+    });
+  }
 }

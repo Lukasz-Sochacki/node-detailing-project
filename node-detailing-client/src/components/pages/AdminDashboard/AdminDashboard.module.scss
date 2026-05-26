@@ -64,6 +64,8 @@
 
 .customTable {
   margin-top: 1rem;
+  width: 100% !important; // Tabela zajmuje równo szerokość ekranu grida
+  table-layout: fixed; // Zmusza kolumny do równego podziału bez rozpychania
 
   th {
     border-top: none !important;
@@ -77,24 +79,26 @@
   }
 
   td {
-    padding: 20px 10px !important;
-    vertical-align: middle !important;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: $color-text-dark;
-    border-bottom: 1px solid rgba($color-text-dark, 0.08) !important;
+    white-space: nowrap; // Blokuje brzydkie zawijanie tytułów
+    overflow: hidden;
+    text-overflow: ellipsis; // Jeśli tytuł jest bardzo długi, doda eleganckie trzy kropki (...)
   }
 }
 
 .imgCell {
-  width: 120px;
+  width: 100px !important; // Sztywny kontener na kolumnę zdjęcia
+  max-width: 100px !important;
+  text-align: center;
 }
 
 .tableThumb {
-  width: 100px;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  background-color: $color-bg-beige;
+  width: 80px !important; // Sztywna szerokość kwadratu
+  height: 80px !important; // Sztywna wysokość kwadratu (gwarantuje brak rozciągania w pionie!)
+  object-fit: cover !important; // Magiczna właściwość: ucina boki zdjęcia, zachowując proporcje modelu 3D
+  border-radius: 0; // Surowy, inżynieryjny styl
+  border: 1px solid rgba($color-text-dark, 0.12);
+  display: block;
+  margin: 0 auto;
 }
 
 .titleCell {
@@ -123,5 +127,64 @@
   &:hover {
     background-color: #dc3545 !important;
     color: $color-bg-white !important;
+  }
+}
+
+.formSection {
+  background-color: $color-bg-white;
+  border: 1px solid rgba($color-text-dark, 0.1);
+  padding: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.addForm {
+  width: 100%;
+}
+
+.customInput,
+.customSelect {
+  width: 100%;
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba($color-text-dark, 0.15) !important;
+  border-radius: 0 !important;
+  padding: 10px 0 !important;
+  font-family: $font-primary;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: $color-text-dark !important;
+  letter-spacing: 1px;
+  box-shadow: none !important;
+
+  &:focus {
+    border-bottom-color: $color-text-dark !important;
+  }
+
+  &::placeholder {
+    color: $color-text-muted;
+    font-size: 0.8rem;
+  }
+}
+
+.customSelect {
+  cursor: pointer;
+  padding-left: 0 !important;
+}
+
+.addBtn {
+  background-color: $color-text-dark !important;
+  border: none !important;
+  color: $color-bg-white !important;
+  font-family: $font-primary;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  width: 100%;
+  padding: 12px 0 !important;
+  border-radius: 0 !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    background-color: rgba($color-text-dark, 0.85) !important;
   }
 }

@@ -29,6 +29,7 @@ export const loginUser = (credentials, onSuccess) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials),
+      credentials: 'include',
     })
       .then((res) => {
         if (!res.ok) throw new Error('Invalid email or password...');
@@ -46,6 +47,10 @@ export const loginUser = (credentials, onSuccess) => {
   };
 };
 
+const savedUser = localStorage.getItem('admin_user')
+  ? JSON.parse(localStorage.getItem('admin_user'))
+  : null;
+
 //Reducer
 const authReducer = (
   statePart = { user: null, loading: false, error: null },
@@ -59,8 +64,10 @@ const authReducer = (
     case ERROR_REQUEST:
       return { ...statePart, loading: false, error: action.payload };
     case LOG_IN:
+      localStorage.setItem('admin_user', JSON.stringify(action.payload));
       return { ...statePart, user: action.payload };
     case LOG_OUT:
+      localStorage.removeItem('admin_user');
       return { ...statePart, user: null };
     default:
       return statePart;

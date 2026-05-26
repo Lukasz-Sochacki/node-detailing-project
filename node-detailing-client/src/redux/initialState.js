@@ -1,3 +1,7 @@
+const savedUser = localStorage.getItem('admin_user')
+  ? JSON.parse(localStorage.getItem('admin_user'))
+  : null;
+
 const initialState = {
   projects: {
     data: [],
@@ -5,7 +9,7 @@ const initialState = {
     error: null,
   },
   auth: {
-    user: null,
+    user: savedUser, // ZMIANA: Wstrzykujemy zapisanego użytkownika od razu przy starcie sklepu!
     loading: false,
     error: null,
   },
