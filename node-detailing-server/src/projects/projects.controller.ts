@@ -1,16 +1,19 @@
 /* eslint-disable */
 import {
-  BadRequestException,
-  Body,
   Controller,
-  Delete,
   Get,
-  NotFoundException,
   Param,
+  Delete,
   Post,
-  UploadedFile,
+  Body,
   UseGuards,
   UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  NotFoundException, // DODAJEMY TE KLASY
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Project } from '@prisma/client';
@@ -51,7 +54,20 @@ export class ProjectsController {
     }),
   )
   public async create(
-    @UploadedFile() file: any,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // 1024 * 1024 = 1048576 bajtów (dokładnie 1 Megabajt)
+          new MaxFileSizeValidator({
+            maxSize: 1048576,
+            message: 'File is too heavy! Maximum allowed size is 1MB.',
+          }),
+          // Akceptujemy wyłącznie pliki graficzne: jpeg, jpg, png oraz nowoczesny, lekki webp
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg|webp)' }),
+        ],
+      }),
+    )
+    file: any,
     @Body() body: { title: string; category: any },
   ) {
     if (!file) {

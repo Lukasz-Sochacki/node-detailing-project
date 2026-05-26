@@ -71,7 +71,7 @@ export const deleteProjectRequest = (id) => {
   };
 };
 
-export const addProjectRequest = (formData, onSuccess) => {
+export const addProjectRequest = (formData, onSuccess, onError) => {
   return (dispatch) => {
     fetch(`${API_URL}/projects`, {
       method: 'POST',
@@ -81,7 +81,14 @@ export const addProjectRequest = (formData, onSuccess) => {
       body: formData,
     })
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to add project to MySQL...');
+        if (!res.ok) {
+          // Kluczowa zmiana: Jeśli serwer odrzuci plik (np. błąd 400), wyciągamy tekst błędu z NestJS
+          return res.json().then((err) => {
+            throw new Error(
+              err.message || 'Failed to add new project to MySQL...',
+            );
+          });
+        }
         return res.json();
       })
       .then((newProject) => {
@@ -89,7 +96,15 @@ export const addProjectRequest = (formData, onSuccess) => {
         dispatch(addProject(newProject));
         if (onSuccess) onSuccess(); // Czyścimy formularz w komponencie
       })
-      .catch((error) => console.error('Error adding project:', error));
+      .catch((error) => {
+        console.error('Error adding project:', error);
+        // BEZPIECZEŃSTWO: Jeśli sieć padnie lub NestJS odrzuci plik, przekazujemy błąd do ekranu
+        if (onError)
+          onError(
+            error.message ||
+              'Network error: Connection refused or file rejected.',
+          );
+      });
   };
 };
 

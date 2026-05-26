@@ -24,6 +24,7 @@ const AdminDashboard = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('INDUSTRIAL');
   const [file, setFile] = useState(null); // Stan trzymający wybrany plik z dysku
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     dispatch(fetchProjects());
@@ -51,6 +52,12 @@ const AdminDashboard = () => {
   const handleAddProject = (e) => {
     e.preventDefault();
     if (!file) return alert('Please select an image file first!');
+    setError(null); // Czyścimy stary błąd przed nową próbą
+    // PILNUJEMY WAGI NA FRONTENDZIE: 1MB = 1048576 bajtów
+    if (file.size > 1048576) {
+      setError('File is too heavy! Maximum allowed size is 1MB.');
+      return; // BEZWZGLĘDNA BLOKADA: Przerywamy działanie funkcji, serwer nawet nie jest odpytywany!
+    }
 
     // BUDUJEMY FORMDATA - niezbędne do przesyłania plików binarnych przez sieć
     const formData = new FormData();
@@ -60,12 +67,19 @@ const AdminDashboard = () => {
 
     //Wywołujemy akcję zapisu w Reduxie
     dispatch(
-      addProjectRequest(formData, () => {
-        setTitle('');
-        setFile(null);
-        //Resetujemy pole pliku w kodzie HTML
-        document.getElementById('fileInput').value = '';
-      }),
+      addProjectRequest(
+        formData,
+        () => {
+          setTitle('');
+          setFile(null);
+          //Resetujemy pole pliku w kodzie HTML
+          document.getElementById('fileInput').value = '';
+        },
+        (errorMessage) => {
+          // Błąd: zapisujemy komunikat w stanie, by wyświetlić go siostrze
+          setError(errorMessage);
+        },
+      ),
     );
   };
 
@@ -86,6 +100,10 @@ const AdminDashboard = () => {
       {/* SEKCJA 1: FORMULARZ DODAWANIA PROJEKTÓW */}
       <section className={styles.formSection}>
         <h2 className={styles.sectionHeading}>Add New Project to Portfolio</h2>
+        {/* WYŚWIETLANIE BŁĘDU Z NESTJS (np. "File is too heavy!...") */}
+        {error && (
+          <div className='alert alert-danger rounded-0 small mb-4'>{error}</div>
+        )}
         <Form onSubmit={handleAddProject} className={styles.addForm}>
           <Row className='align-items-end g-4'>
             <Col md={4}>
