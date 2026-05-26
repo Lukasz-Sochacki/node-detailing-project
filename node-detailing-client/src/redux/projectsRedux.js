@@ -108,6 +108,41 @@ export const addProjectRequest = (formData, onSuccess, onError) => {
   };
 };
 
+export const moveProjectUpRequest = (id) => {
+  return (dispatch) => {
+    fetch(`${API_URL}/projects/${id}/move-up`, {
+      method: 'PATCH',
+      credentials: 'include', // Wysyłamy ciasteczko sesyjne administratora
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to move project up...');
+        return res.json();
+      })
+      .then(() => {
+        // KLUCZOWE: Pobieramy z MySQL świeżą, nowo posortowaną listę wierszy
+        dispatch(fetchProjects());
+      })
+      .catch((error) => console.error('Error moving project:', error));
+  };
+};
+
+export const moveProjectDownRequest = (id) => {
+  return (dispatch) => {
+    fetch(`${API_URL}/projects/${id}/move-down`, {
+      method: 'PATCH',
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to move project down...');
+        return res.json();
+      })
+      .then(() => {
+        dispatch(fetchProjects());
+      })
+      .catch((error) => console.error('Error moving project:', error));
+  };
+};
+
 const projectsReducer = (
   statePart = { data: [], loading: false, error: null },
   action,

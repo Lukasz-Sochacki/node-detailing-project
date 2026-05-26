@@ -49,87 +49,6 @@
   }
 }
 
-.tableSection {
-  background-color: $color-bg-white;
-}
-
-.sectionHeading {
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: $color-text-dark;
-  margin-bottom: 2rem;
-}
-
-.customTable {
-  margin-top: 1rem;
-  width: 100% !important; // Tabela zajmuje równo szerokość ekranu grida
-  table-layout: fixed; // Zmusza kolumny do równego podziału bez rozpychania
-
-  th {
-    border-top: none !important;
-    border-bottom: 2px solid $color-text-dark !important;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: $color-text-dark;
-    padding: 15px 10px !important;
-  }
-
-  td {
-    white-space: nowrap; // Blokuje brzydkie zawijanie tytułów
-    overflow: hidden;
-    text-overflow: ellipsis; // Jeśli tytuł jest bardzo długi, doda eleganckie trzy kropki (...)
-  }
-}
-
-.imgCell {
-  width: 100px !important; // Sztywny kontener na kolumnę zdjęcia
-  max-width: 100px !important;
-  text-align: center;
-}
-
-.tableThumb {
-  width: 80px !important; // Sztywna szerokość kwadratu
-  height: 80px !important; // Sztywna wysokość kwadratu (gwarantuje brak rozciągania w pionie!)
-  object-fit: cover !important; // Magiczna właściwość: ucina boki zdjęcia, zachowując proporcje modelu 3D
-  border-radius: 0; // Surowy, inżynieryjny styl
-  border: 1px solid rgba($color-text-dark, 0.12);
-  display: block;
-  margin: 0 auto;
-}
-
-.titleCell {
-  font-weight: 700 !important;
-  letter-spacing: 0.5px;
-}
-
-.categoryCell {
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 1px;
-  color: $color-text-muted !important;
-}
-
-.deleteBtn {
-  background-color: transparent !important;
-  border: 1px solid #dc3545 !important; // Czerwona ramka ostrzegawcza
-  color: #dc3545 !important;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  padding: 8px 16px !important;
-  border-radius: 0 !important;
-  transition: $transition-smooth;
-
-  &:hover {
-    background-color: #dc3545 !important;
-    color: $color-bg-white !important;
-  }
-}
-
 .formSection {
   background-color: $color-bg-white;
   border: 1px solid rgba($color-text-dark, 0.1);
@@ -186,5 +105,140 @@
 
   &:hover {
     background-color: rgba($color-text-dark, 0.85) !important;
+  }
+}
+
+.tableSection {
+  background-color: $color-bg-white;
+  min-height: 400px;
+}
+
+.sectionHeading {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $color-text-dark;
+  margin-bottom: 2rem;
+}
+
+.customTable {
+  margin-top: 1rem;
+  width: 100% !important;
+  table-layout: fixed;
+
+  th {
+    border-top: none !important;
+    border-bottom: 2px solid $color-text-dark !important;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $color-text-dark;
+    padding: 15px 10px !important;
+  }
+
+  td {
+    padding: 20px 10px !important;
+    vertical-align: middle !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $color-text-dark;
+    border-bottom: 1px solid rgba($color-text-dark, 0.08) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.imgCell {
+  width: 110px !important;
+  max-width: 110px !important;
+  text-align: center;
+}
+
+.tableThumb {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: cover !important;
+  border-radius: 0;
+  border: 1px solid rgba($color-text-dark, 0.12);
+  display: block;
+  margin: 0 auto;
+}
+
+.titleCell {
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+.categoryCell {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px;
+  color: $color-text-muted !important;
+}
+
+.orderActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.orderBtn {
+  background-color: transparent !important;
+  border: 1px solid rgba($color-text-dark, 0.15) !important;
+  color: $color-text-dark !important;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px !important;
+  border-radius: 0 !important;
+  transition: $transition-smooth;
+
+  &:hover:not(:disabled) {
+    background-color: $color-text-dark !important;
+    color: $color-bg-white !important;
+    border-color: $color-text-dark !important;
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    border-color: rgba($color-text-dark, 0.1) !important;
+    color: $color-text-muted !important;
+  }
+}
+
+.deleteBtn {
+  background-color: transparent !important;
+  border: 1px solid #dc3545 !important;
+  color: #dc3545 !important;
+  font-family: $font-primary;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 8px 16px !important;
+  border-radius: 0 !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    background-color: #dc3545 !important;
+    color: $color-bg-white !important;
+  }
+}
+
+.backToHome {
+  display: inline-block;
+  color: $color-text-muted;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  transition: $transition-smooth;
+
+  &:hover {
+    color: $color-text-dark;
+    transform: translateX(-3px); // Subtelne przesunięcie w lewo przy najechaniu
   }
 }

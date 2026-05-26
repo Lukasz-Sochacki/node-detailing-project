@@ -8,9 +8,12 @@ import {
   getIsLoading,
   deleteProjectRequest,
   addProjectRequest,
+  moveProjectUpRequest,
+  moveProjectDownRequest,
 } from '../../../redux/projectsRedux';
 import { logOut, getUser } from '../../../redux/authRedux';
 import styles from './AdminDashboard.module.scss';
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -20,10 +23,10 @@ const AdminDashboard = () => {
   const isLoading = useSelector(getIsLoading);
   const user = useSelector(getUser);
 
-  // Stany formularza dla nowej pozycji portfolio
+  // Stany formularza
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('INDUSTRIAL');
-  const [file, setFile] = useState(null); // Stan trzymający wybrany plik z dysku
+  const [file, setFile] = useState(null); // Przechowuje czysty, pojedynczy plik
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -46,37 +49,38 @@ const AdminDashboard = () => {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]); // Przechwytujemy pierwszy wybrany plik z okna systemowego
+    // Sprawdzamy, czy tablica plików w ogóle istnieje i czy ma przynajmniej 1 element
+    if (e.target.files && e.target.files.length > 0) {
+      // JAWNA POPRAWKA: Przypisujemy do stanu czysty, pojedynczy plik z indeksem 0
+      setFile(e.target.files[0]);
+    }
   };
 
   const handleAddProject = (e) => {
     e.preventDefault();
     if (!file) return alert('Please select an image file first!');
-    setError(null); // Czyścimy stary błąd przed nową próbą
-    // PILNUJEMY WAGI NA FRONTENDZIE: 1MB = 1048576 bajtów
+    setError(null);
+
+    // Walidacja wagi na frontendzie (1MB = 1048576 bajtów)
     if (file.size > 1048576) {
       setError('File is too heavy! Maximum allowed size is 1MB.');
-      return; // BEZWZGLĘDNA BLOKADA: Przerywamy działanie funkcji, serwer nawet nie jest odpytywany!
+      return;
     }
 
-    // BUDUJEMY FORMDATA - niezbędne do przesyłania plików binarnych przez sieć
     const formData = new FormData();
     formData.append('title', title);
     formData.append('category', category);
-    formData.append('file', file); // Wstrzykujemy plik binarny
+    formData.append('image', file);
 
-    //Wywołujemy akcję zapisu w Reduxie
     dispatch(
       addProjectRequest(
         formData,
         () => {
           setTitle('');
           setFile(null);
-          //Resetujemy pole pliku w kodzie HTML
           document.getElementById('fileInput').value = '';
         },
         (errorMessage) => {
-          // Błąd: zapisujemy komunikat w stanie, by wyświetlić go siostrze
           setError(errorMessage);
         },
       ),
@@ -87,6 +91,12 @@ const AdminDashboard = () => {
     <Container className={styles.dashboardPage}>
       <header className={styles.header}>
         <div>
+          {/* LINK POWROTU NAD TYTUŁEM PANELU */}
+          <div className='mb-2'>
+            <Link to='/' className={styles.backToHome}>
+              ← BACK TO MAIN SITE
+            </Link>
+          </div>
           <h1 className={styles.title}>NODE CONTROL PANEL</h1>
           <p className={styles.subTitle}>
             Logged in as: <strong>{user?.email}</strong>
@@ -100,11 +110,10 @@ const AdminDashboard = () => {
       {/* SEKCJA 1: FORMULARZ DODAWANIA PROJEKTÓW */}
       <section className={styles.formSection}>
         <h2 className={styles.sectionHeading}>Add New Project to Portfolio</h2>
-        {/* WYŚWIETLANIE BŁĘDU Z NESTJS (np. "File is too heavy!...") */}
         {error && (
           <div className='alert alert-danger rounded-0 small mb-4'>{error}</div>
         )}
-        <Form onSubmit={handleAddProject} className={styles.addForm}>
+        <form onSubmit={handleAddProject} className={styles.addForm}>
           <Row className='align-items-end g-4'>
             <Col md={4}>
               <Form.Group>
@@ -134,17 +143,16 @@ const AdminDashboard = () => {
             </Col>
             <Col md={3}>
               <Form.Group>
-                {/* ZMIANA: Prawdziwe okno załączania pliku graficznego z dysku */}
                 <Form.Control
                   id='fileInput'
                   type='file'
-                  accept='image/*' //Akceptujemy wyłącznie pliki graficzne
+                  accept='image/*'
                   onChange={handleFileChange}
                   required
                   className={styles.customInput}
                 />
                 <Form.Text className='text-muted small px-1'>
-                  Select model screenshot from your hard drive
+                  Select model screenshot
                 </Form.Text>
               </Form.Group>
             </Col>
@@ -154,7 +162,7 @@ const AdminDashboard = () => {
               </Button>
             </Col>
           </Row>
-        </Form>
+        </form>
       </section>
 
       {/* SEKCJA 2: TABELA Z LISTĄ OBECNYCH PROJEKTÓW */}
@@ -162,7 +170,7 @@ const AdminDashboard = () => {
         <h2 className={styles.sectionHeading}>
           Current Portfolio Items ({projects.length})
         </h2>
-        {isLoading ? (
+        {isLoading && projects.length === 0 ? (
           <p className='text-muted'>Loading database items...</p>
         ) : (
           <Table responsive className={styles.customTable}>
@@ -171,23 +179,47 @@ const AdminDashboard = () => {
                 <th>PREVIEW</th>
                 <th>PROJECT TITLE</th>
                 <th>CATEGORY</th>
+                <th className='text-center'>ORDER</th>
                 <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
-              {projects.map((project) => (
+              {projects.map((project, index) => (
                 <tr key={project.id}>
-                  {/* LITERÓWKA NAPRAWIONA: Było imgCell, zsynchronizowano z klasą w SCSS */}
                   <td className={styles.imgCell}>
                     <img
                       src={project.mainImage}
                       alt=''
-                      /* LITERÓWKA NAPRAWIONA: Było tableThmb, zmieniono na pełne tableThumb z Twojego SCSS */
                       className={styles.tableThumb}
                     />
                   </td>
                   <td className={styles.titleCell}>{project.title}</td>
                   <td className={styles.categoryCell}>{project.category}</td>
+
+                  {/* KOLUMNA STRZAŁEK KOLEJNOŚCI */}
+                  <td className='text-center'>
+                    <div className={styles.orderActions}>
+                      <Button
+                        disabled={index === 0}
+                        onClick={() =>
+                          dispatch(moveProjectUpRequest(project.id))
+                        }
+                        className={styles.orderBtn}
+                      >
+                        ↑
+                      </Button>
+                      <Button
+                        disabled={index === projects.length - 1}
+                        onClick={() =>
+                          dispatch(moveProjectDownRequest(project.id))
+                        }
+                        className={styles.orderBtn}
+                      >
+                        ↓
+                      </Button>
+                    </div>
+                  </td>
+
                   <td>
                     <Button
                       onClick={() => handleDeleteProject(project.id)}

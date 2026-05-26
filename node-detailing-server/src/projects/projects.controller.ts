@@ -13,7 +13,8 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
-  NotFoundException, // DODAJEMY TE KLASY
+  NotFoundException,
+  Patch, // DODAJEMY TE KLASY
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Project } from '@prisma/client';
@@ -33,16 +34,14 @@ export class ProjectsController {
     return this.projectsService.getAll();
   }
 
-  // ZABEZPIECZONY ENDPOINT POST: Odbiera tekst i fizyczny plik z dysku
+  // ZABEZPIECZONY ENDPOINT POST: Zaktualizowany i odporny na błąd bufora pliku
   @UseGuards(JwtAuthGuard, AdminAuthGuard)
   @Post()
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor('image', {
       storage: diskStorage({
-        // Zapisujemy plik bezpośrednio do folderu public w Twoim React-Client
         destination: '../node-detailing-client/public/images/portfolio',
         filename: (req, file, cb) => {
-          // Generujemy unikalną nazwę opartą o czas, zachowując oryginalne rozszerzenie (.jpg/.png)
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(
@@ -51,30 +50,40 @@ export class ProjectsController {
           );
         },
       }),
+      // NOWY FILTR: Sprawdzamy rozszerzenie pliku tekstowo - to działa zawsze i bez błędów pamięci!
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/i)) {
+          return cb(
+            new BadRequestException(
+              'Only image files are allowed! (.jpg, .jpeg, .png, .webp)',
+            ),
+            false,
+          );
+        }
+        cb(null, true);
+      },
     }),
   )
   public async create(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          // 1024 * 1024 = 1048576 bajtów (dokładnie 1 Megabajt)
+          // Zostawiamy wyłącznie walidację wagi (ona nie potrzebuje bufora i działa idealnie!)
           new MaxFileSizeValidator({
             maxSize: 1048576,
             message: 'File is too heavy! Maximum allowed size is 1MB.',
           }),
-          // Akceptujemy wyłącznie pliki graficzne: jpeg, jpg, png oraz nowoczesny, lekki webp
-          new FileTypeValidator({ fileType: '.(png|jpeg|jpg|webp)' }),
         ],
       }),
     )
-    file: any,
+    image: any,
     @Body() body: { title: string; category: any },
   ) {
-    if (!file) {
+    if (!image) {
       throw new BadRequestException('Image file is required!');
     }
-    // Ścieżka, która trafi na stałe do bazy danych MySQL przez Prismę
-    const mainImage = `/images/portfolio/${file.filename}`;
+
+    const mainImage = `/images/portfolio/${image.filename}`;
 
     const newProject = await this.projectsService.create({
       title: body.title,
@@ -91,6 +100,22 @@ export class ProjectsController {
     const project = await this.projectsService.getById(id);
     if (!project) throw new NotFoundException('Project not found...');
     return project;
+  }
+
+  // ENDPOINT PRZESUWANIA W GÓRĘ
+  @UseGuards(JwtAuthGuard, AdminAuthGuard)
+  @Patch('/:id/move-up')
+  public async moveUp(@Param('id') id: string) {
+    await this.projectsService.swapOrder(id, 'UP');
+    return { message: 'success' };
+  }
+
+  // ENDPOINT PRZESUWANIA W DÓŁ
+  @UseGuards(JwtAuthGuard, AdminAuthGuard)
+  @Patch('/:id/move-down')
+  public async moveDown(@Param('id') id: string) {
+    await this.projectsService.swapOrder(id, 'DOWN');
+    return { message: 'success' };
   }
 
   // TYLKO ZALOGOWANY ADMINISTRATOR MOŻE USUNĄĆ PROJEKT Z MYSQL

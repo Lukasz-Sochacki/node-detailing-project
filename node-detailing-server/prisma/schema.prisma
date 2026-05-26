@@ -26,6 +26,7 @@ model Project {
   title String // Nazwa projektu 
   category Category //Jedna z czterech powyższych kategorii
   mainImage String // URL do screenshotu modelu 3D
+  orderIndex Int @default(0) // Nowe pole: decyduje o kolejności wyświetlania
   createdAt DateTime @default(now())
 }
 
